@@ -1,0 +1,40 @@
+// 5. Burnable + enumerable
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract BurnableEnumerableNFT is ERC721Enumerable, ERC721Burnable, Ownable {
+    uint256 private _tokenId;
+
+    constructor() ERC721("Burn & Enumerable", "BENFT") Ownable(msg.sender) {}
+
+    function mint(address to) external onlyOwner {
+        _tokenId++;
+        _mint(to, _tokenId);
+    }
+
+    // Required overrides
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        override(ERC721, ERC721Enumerable)
+        returns (address)
+    {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(address account, uint128 value)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._increaseBalance(account, value);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+}
