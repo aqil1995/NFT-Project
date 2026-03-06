@@ -1,0 +1,11 @@
+// 14. Mint with max per tx
+contract RateLimitedMint is ERC721, Ownable {
+    uint256 private _tokenId;
+    uint256 public constant MAX_PER_TX = 20;
+    constructor() ERC721("Rate Limited", "RLNFT") Ownable(msg.sender) {}
+    function mint(address to, uint256 qty) external onlyOwner {
+        require(qty <= MAX_PER_TX, "Exceeds max per tx");
+        for (uint256 i = 0; i < qty; i++) _mint(to, ++_tokenId);
+    }
+}
+
