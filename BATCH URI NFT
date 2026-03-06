@@ -1,0 +1,24 @@
+// 6. URI storage + batch mint
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract BatchURINFT is ERC721URIStorage, Ownable {
+    uint256 private _tokenId;
+
+    constructor() ERC721("Batch URI NFT", "BUNFT") Ownable(msg.sender) {}
+
+    function mintWithURI(address to, string memory uri) external onlyOwner {
+        _tokenId++;
+        _mint(to, _tokenId);
+        _setTokenURI(_tokenId, uri);
+    }
+
+    function batchMint(address to, uint256 quantity, string[] calldata uris) external onlyOwner {
+        require(quantity == uris.length, "Mismatch length");
+        for (uint256 i = 0; i < quantity; i++) {
+            _tokenId++;
+            _mint(to, _tokenId);
+            _setTokenURI(_tokenId, uris[i]);
+        }
+    }
+}
