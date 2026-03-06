@@ -1,0 +1,10 @@
+// 13. Mint multiple to same address at once
+contract BatchSameAddress is ERC721, Ownable {
+    uint256 private _tokenId;
+    constructor() ERC721("Batch Same", "BSNFT") Ownable(msg.sender) {}
+    function batchMint(address to, uint256 amount) external onlyOwner {
+        for (uint256 i = 0; i < amount; i++) {
+            _mint(to, ++_tokenId);
+        }
+    }
+}
