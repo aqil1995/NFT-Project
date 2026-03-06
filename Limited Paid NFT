@@ -1,0 +1,19 @@
+// 3. Limited supply with price (ETH)
+contract LimitedPaidNFT is ERC721, Ownable {
+    uint256 public constant MAX_SUPPLY = 333;
+    uint256 public constant PRICE = 0.005 ether;
+    uint256 public totalMinted;
+
+    constructor() ERC721("Limited Paid NFT", "LPNFT") Ownable(msg.sender) {}
+
+    function mint(address to) external payable onlyOwner {
+        require(totalMinted < MAX_SUPPLY, "Max supply reached");
+        require(msg.value >= PRICE, "Insufficient payment");
+        totalMinted++;
+        _mint(to, totalMinted);
+    }
+
+    function withdraw() external onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
+}
