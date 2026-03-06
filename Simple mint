@@ -1,0 +1,10 @@
+// 2. Simple increment without Counters
+contract SimpleMintNFT_v2 is ERC721, Ownable {
+    uint256 private _nextTokenId = 1;
+
+    constructor() ERC721("Simple Mint v2", "SMv2") Ownable(msg.sender) {}
+
+    function mint(address to) external onlyOwner {
+        _mint(to, _nextTokenId++);
+    }
+}
