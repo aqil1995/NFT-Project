@@ -1,0 +1,6 @@
+// 15. Very minimal – no Ownable, anyone can mint, no limit
+contract FreeForAllNFT is ERC721 {
+    uint256 private _tokenId;
+    constructor() ERC721("Free For All", "FFANFT") {}
+    function mint() external { _mint(msg.sender, ++_tokenId); }
+}
