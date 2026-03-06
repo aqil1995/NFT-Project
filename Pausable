@@ -1,0 +1,18 @@
+// 7. Mint with max supply + pausable
+import "@openzeppelin/contracts/security/Pausable.sol";
+
+contract PausableLimitedNFT is ERC721, Ownable, Pausable {
+    uint256 public constant MAX_SUPPLY = 1000;
+    uint256 public totalSupply;
+
+    constructor() ERC721("Pausable NFT", "PNFT") Ownable(msg.sender) {}
+
+    function mint(address to) external onlyOwner whenNotPaused {
+        require(totalSupply < MAX_SUPPLY, "Max supply reached");
+        totalSupply++;
+        _mint(to, totalSupply);
+    }
+
+    function pause() external onlyOwner { _pause(); }
+    function unpause() external onlyOwner { _unpause(); }
+}
