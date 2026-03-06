@@ -1,0 +1,19 @@
+// 4. Public mint with max per wallet
+contract PublicMintWithLimit is ERC721 {
+    uint256 private _tokenId;
+    uint256 public constant MAX_PER_WALLET = 5;
+    mapping(address => uint256) public mintedByAddress;
+
+    constructor() ERC721("Public Limited", "PLNFT") {}
+
+    function mint(uint256 quantity) external {
+        require(quantity > 0 && quantity <= 10, "Invalid quantity");
+        require(mintedByAddress[msg.sender] + quantity <= MAX_PER_WALLET, "Exceeds wallet limit");
+
+        for (uint256 i = 0; i < quantity; i++) {
+            _tokenId++;
+            _mint(msg.sender, _tokenId);
+            mintedByAddress[msg.sender]++;
+        }
+    }
+}
