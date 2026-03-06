@@ -1,0 +1,20 @@
+// 9. Allowlist mint (merkle tree style – simplified)
+contract AllowlistNFT is ERC721, Ownable {
+    uint256 private _tokenId;
+    mapping(address => bool) public allowlisted;
+
+    constructor() ERC721("Allowlist NFT", "ALNFT") Ownable(msg.sender) {}
+
+    function addToAllowlist(address[] calldata users) external onlyOwner {
+        for (uint256 i = 0; i < users.length; i++) {
+            allowlisted[users[i]] = true;
+        }
+    }
+
+    function mint() external {
+        require(allowlisted[msg.sender], "Not allowlisted");
+        allowlisted[msg.sender] = false; // one-time use
+        _tokenId++;
+        _mint(msg.sender, _tokenId);
+    }
+}
