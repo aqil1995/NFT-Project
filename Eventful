@@ -1,0 +1,11 @@
+// 11. Mint with counter + event
+contract EventfulNFT is ERC721, Ownable {
+    uint256 private _tokenId;
+    event NFTMinted(address indexed to, uint256 indexed tokenId);
+    constructor() ERC721("Eventful", "EVNFT") Ownable(msg.sender) {}
+    function mint(address to) external onlyOwner {
+        uint256 id = ++_tokenId;
+        _mint(to, id);
+        emit NFTMinted(to, id);
+    }
+}
