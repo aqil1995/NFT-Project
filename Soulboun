@@ -1,0 +1,9 @@
+// 10. Soulbound (non-transferable)
+contract SoulboundNFT is ERC721, Ownable {
+    uint256 private _tokenId;
+    constructor() ERC721("Soulbound", "SBNFT") Ownable(msg.sender) {}
+    function mint(address to) external onlyOwner { _mint(to, ++_tokenId); }
+    function _beforeTokenTransfer(address from, address, uint256, uint256) internal pure override {
+        require(from == address(0), "Token is soulbound");
+    }
+}
