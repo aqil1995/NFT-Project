@@ -1,0 +1,31 @@
+// 8. Royalties (simple on-chain — EIP-2981 lite version)
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
+
+contract RoyaltyNFT is ERC721, Ownable, IERC2981 {
+    uint256 private _tokenId;
+    address public royaltyReceiver;
+    uint96 public constant ROYALTY_BPS = 750; // 7.5%
+
+    constructor(address _royaltyReceiver) ERC721("Royalty NFT", "RNFT") Ownable(msg.sender) {
+        royaltyReceiver = _royaltyReceiver;
+    }
+
+    function mint(address to) external onlyOwner {
+        _tokenId++;
+        _mint(to, _tokenId);
+    }
+
+    function royaltyInfo(uint256, uint256 salePrice)
+        external
+        view
+        override
+        returns (address receiver, uint256 royaltyAmount)
+    {
+        receiver = royaltyReceiver;
+        royaltyAmount = (salePrice * ROYALTY_BPS) / 10000;
+    }
+
+    function setRoyaltyReceiver(address newReceiver) external onlyOwner {
+        royaltyReceiver = newReceiver;
+    }
+}
