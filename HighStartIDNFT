@@ -1,0 +1,7 @@
+// 12. Different starting ID (starts from 10000)
+contract HighStartIDNFT is ERC721, Ownable {
+    uint256 private _tokenId = 9999;
+    constructor() ERC721("High ID NFT", "HINFT") Ownable(msg.sender) {}
+    function mint(address to) external onlyOwner { _mint(to, ++_tokenId); }
+}
+
